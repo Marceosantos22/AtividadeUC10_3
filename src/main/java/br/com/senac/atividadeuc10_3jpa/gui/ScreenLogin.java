@@ -8,14 +8,14 @@ import javax.swing.JOptionPane;
  * @author Marcelo Oliveira
  */
 public class ScreenLogin extends javax.swing.JFrame {
-	
+
 	public ScreenLogin() {
 		initComponents();
-		
+
 		setLocationRelativeTo(null); // Para abrir a tela centralizada.
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
    private void initComponents() {
@@ -39,6 +39,7 @@ public class ScreenLogin extends javax.swing.JFrame {
       jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
       jLabel2.setText("Cenaflix Podcast: a sua plataforma de streaming de áudio.");
 
+      jButton1.setBackground(java.awt.Color.cyan);
       jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
       jButton1.setText("LOGIN");
       jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -114,18 +115,14 @@ public class ScreenLogin extends javax.swing.JFrame {
    }// </editor-fold>//GEN-END:initComponents
 
    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      consultaLogin();
+		consultaLogin();
    }//GEN-LAST:event_jButton1ActionPerformed
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
+		
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -142,9 +139,9 @@ public class ScreenLogin extends javax.swing.JFrame {
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(ScreenLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
-		//</editor-fold>
+		
 
-		/* Create and display the form */
+		
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				new ScreenLogin().setVisible(true);
@@ -161,56 +158,66 @@ public class ScreenLogin extends javax.swing.JFrame {
    private javax.swing.JPasswordField txtLoginSenha;
    // End of variables declaration//GEN-END:variables
 
+	
+	/**
+	 * Realize uma consulta de login e senha do usuário na base de dados
+	 * e verifique as permissões de acesso.
+	 * Abra a tela de listagem caso o login seja bem-sucedido e exiba
+	 * uma mensagem de erro caso tenha causado uma falha.
+	 */
 	public void consultaLogin() {
-		
+
 		String login = txtLoginNome.getText();
 		String senha = String.valueOf(txtLoginSenha.getPassword());
-		
+
 		int permissao = 0;
 		String tipoPermissao = "";
 		String userName = "";
-		
+
 		if (login.isEmpty() || senha.isEmpty()) {
-			
-			JOptionPane.showMessageDialog(null, "Favor preencher os campos Login e Senha corretamente!");
-			
+
+			JOptionPane.showMessageDialog
+		  (null, "Favor preencher os campos Login e Senha corretamente!");
+
 		} else {
-			
+
 			UsuarioDAO user = new UsuarioDAO();
 			Usuario userlocalizado = user.checkLogin(login, senha);
-			
+
 			if (userlocalizado == null) {
-				
+
 				JOptionPane.showMessageDialog(null, "Usuário não localizado,"
 						  + " acesso negado!");
-				
+
 			} else {
-				
+
 				permissao = userlocalizado.getPermissao();
 				userName = userlocalizado.getLogin();
-				
+
 				if (permissao == 1) {
-					
+
 					tipoPermissao = "Administrador";
-					
+
 				} else if (permissao == 2) {
-					
+
 					tipoPermissao = "Operador";
-					
+
 				} else if (permissao == 3) {
-					
+
 					tipoPermissao = "Operador";
-					
+
 				}
-				
+
 				dispose();
 				ScreenListagem screenList = new ScreenListagem();
-				screenList.checkPermissao(permissao);
+				String nomeUser = txtLoginNome.getText();
+				tipoPermissao = tipoPermissao;
+				screenList.checkPermissao(permissao,nomeUser);
+				screenList.boasVindas(nomeUser, tipoPermissao);
 				screenList.setVisible(true);
-				
-				
+
 			}
 		}
 	}
-	
+
 }

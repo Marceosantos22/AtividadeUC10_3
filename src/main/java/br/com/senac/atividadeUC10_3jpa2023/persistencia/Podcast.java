@@ -1,10 +1,12 @@
 package br.com.senac.atividadeUC10_3jpa2023.persistencia;
 
-import com.google.protobuf.Duration;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+
 
 /**
  * @author Marcelo Oliveira
@@ -20,7 +22,7 @@ public class Podcast {
 	private String produtor;
 	private String nomeEpsodio;
 	private int numeroEpsodio;
-	private Duration duracao;
+	private int duracao;
 	private String urlRepositorio;
 
 	/**
@@ -58,11 +60,11 @@ public class Podcast {
 		this.numeroEpsodio = numeroEpsodio;
 	}
 
-	public Duration getDuracao() {
+	public int getDuracao() {
 		return duracao;
 	}
 
-	public void setDuracao(Duration duracao) {
+	public void setDuracao(int duracao) {
 		this.duracao = duracao;
 	}
 
